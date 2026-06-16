@@ -255,7 +255,7 @@ export const fighters: Fighter[] = [
   country: "Indonesia",
   countryFlag: "🇮🇩",
   weightClass: "Bantamweight",
-  record: { wins: 5, losses: 1, draws: 0 },
+  record: { wins: 6, losses: 1, draws: 0 },
   style: "Muay Thai / Dynamic Striker",
   sport: "Muay Thai",
   image: "/images/idin.png",
