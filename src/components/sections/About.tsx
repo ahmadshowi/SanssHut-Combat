@@ -39,7 +39,7 @@ export default function About() {
         <FadeIn direction="left" className="relative">
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/10 shadow-card">
             <Image
-              src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=1200&auto=format&fit=crop"
+              src="/images/logo.png"
               alt="Fighters inside an arena"
               fill
               className="object-cover"

@@ -18,14 +18,6 @@ export const sportCategories: SportCategory[] = [
       "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=900&auto=format&fit=crop",
   },
   {
-    id: "muay-thai",
-    name: "Muay Thai",
-    description:
-      "The art of eight limbs. Thailand's national sport delivers devastating strikes from fists, elbows, knees, and shins.",
-    image:
-      "https://images.unsplash.com/photo-1544216717-3bbf52512659?q=80&w=900&auto=format&fit=crop",
-  },
-  {
     id: "kickboxing",
     name: "Kickboxing",
     description:
