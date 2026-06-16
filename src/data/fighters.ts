@@ -155,7 +155,7 @@ export const fighters: Fighter[] = [
   record: { wins: 9, losses: 3, draws: 0 },
   style: "Kickboxing / Counter Striker",
   sport: "Kickboxing",
-  image: "/images/dzikrul.png",
+  image: "/images/akuy.png",
   stats: { winRate: 75, koRate: 56, submissionRate: 0, reach: 175, height: 173, age: 23 },
 },
 
