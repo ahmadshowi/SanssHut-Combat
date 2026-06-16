@@ -51,7 +51,7 @@ export const fighters: Fighter[] = [
   },
   {
     id: "haikal-halilintar",
-    name: 'Haikal "Halilintar" Halilintar',
+    name: 'Haikal "Ashiap" Halilintar',
     country: "Indonesia",
     countryFlag: "🇮🇩",
     weightClass: "Middleweight",
@@ -94,7 +94,7 @@ export const fighters: Fighter[] = [
     record: { wins: 16, losses: 1, draws: 0 },
     style: "Power Puncher / Dominator",
     sport: "Boxing",
-    image: "/images/sultan.png",
+    image: "/images/sul.png",
     stats: { winRate: 94, koRate: 88, submissionRate: 0, reach: 195, height: 188, age: 26 },
   },
   {
@@ -226,7 +226,7 @@ export const fighters: Fighter[] = [
 
 {
   id: "muhammad-iqbal",
-  name: 'Muhammad "The Swan" Iqbal',
+  name: 'Iqbal "The Sex" Faroga',
   country: "Indonesia",
   countryFlag: "🇮🇩",
   weightClass: "Welterweight",
@@ -247,6 +247,18 @@ export const fighters: Fighter[] = [
   style: "Muay Thai / Dynamic Striker",
   sport: "Muay Thai",
   image: "/images/lutfi.png",
+  stats: { winRate: 83, koRate: 60, submissionRate: 0, reach: 167, height: 165, age: 20 },
+},
+{
+  id: "daffa-izzudin",
+  name: 'daffa "The Eye" Izzudin',
+  country: "Indonesia",
+  countryFlag: "🇮🇩",
+  weightClass: "Bantamweight",
+  record: { wins: 5, losses: 1, draws: 0 },
+  style: "Muay Thai / Dynamic Striker",
+  sport: "Muay Thai",
+  image: "/images/idin.png",
   stats: { winRate: 83, koRate: 60, submissionRate: 0, reach: 167, height: 165, age: 20 },
 },
 ];
