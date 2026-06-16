@@ -172,22 +172,11 @@ export const fighters: Fighter[] = [
   stats: { winRate: 88, koRate: 50, submissionRate: 0, reach: 171, height: 168, age: 22 },
 },
 
-{
-  id: "irfan-nasir",
-  name: 'Irfan "Night Wolf" Nasir',
-  country: "Indonesia",
-  countryFlag: "🇮🇩",
-  weightClass: "Welterweight",
-  record: { wins: 12, losses: 4, draws: 1 },
-  style: "Boxing / Precision Striking",
-  sport: "Boxing",
-  image: "/images/irfan.png",
-  stats: { winRate: 71, koRate: 61, submissionRate: 0, reach: 180, height: 178, age: 25 },
-},
+
 
 {
   id: "alif-kresna",
-  name: 'Alif "Thunder" Kresna',
+  name: 'Alif "Gorilla" Kresna',
   country: "Indonesia",
   countryFlag: "🇮🇩",
   weightClass: "Bantamweight",
@@ -260,6 +249,18 @@ export const fighters: Fighter[] = [
   sport: "Muay Thai",
   image: "/images/idin.png",
   stats: { winRate: 83, koRate: 60, submissionRate: 0, reach: 167, height: 165, age: 20 },
+},
+{
+  id: "irfan-nasir",
+  name: 'Irfan "Night Wolf" Nasir',
+  country: "Indonesia",
+  countryFlag: "🇮🇩",
+  weightClass: "Welterweight",
+  record: { wins: 12, losses: 4, draws: 1 },
+  style: "Boxing / Precision Striking",
+  sport: "Boxing",
+  image: "/images/irfan.png",
+  stats: { winRate: 71, koRate: 61, submissionRate: 0, reach: 180, height: 178, age: 25 },
 },
 ];
 
