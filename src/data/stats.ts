@@ -2,7 +2,7 @@ import { StatItem, VersusMatchup } from "@/types";
 import { getFighterById } from "./fighters";
 
 export const heroStats: StatItem[] = [
-  { label: "Fighters", value: 11, suffix: "" },
+  { label: "Fighters", value: 21, suffix: "" },
   { label: "Events", value: 1, suffix: "+" },
   { label: "Venues", value: 1, suffix: "+" },
   { label: "Coverage", value: 0, suffix: "Indonesia" },
