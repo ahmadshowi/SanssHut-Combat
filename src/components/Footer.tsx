@@ -85,11 +85,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-primary" />
-                <span>+1 (555) 010-2024</span>
+                <span> Showi +6282299417885</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={16} className="text-primary" />
-                <span>Las Vegas, NV, USA</span>
+                <span>Indonesia, Cianjur</span>
               </li>
             </ul>
           </div>
