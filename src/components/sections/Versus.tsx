@@ -184,12 +184,48 @@ export default function Versus() {
                   </p>
 
                   <div className="mt-6 flex flex-col divide-y divide-white/5">
-                    <StatBar label="Win Rate" valueA={fighterA.stats.winRate} valueB={fighterB.stats.winRate} maxValue={100} unit="%" />
-                    <StatBar label="KO Rate" valueA={fighterA.stats.koRate} valueB={fighterB.stats.koRate} maxValue={100} unit="%" />
-                    <StatBar label="Submission Rate" valueA={fighterA.stats.submissionRate} valueB={fighterB.stats.submissionRate} maxValue={100} unit="%" />
-                    <StatBar label="Reach" valueA={fighterA.stats.reach} valueB={fighterB.stats.reach} maxValue={250} unit=" cm" />
-                    <StatBar label="Height" valueA={fighterA.stats.height} valueB={fighterB.stats.height} maxValue={220} unit=" cm" />
-                    <StatBar label="Age" valueA={fighterA.stats.age} valueB={fighterB.stats.age} maxValue={50} unit=" yrs" />
+                    <StatBar
+                      label="Win Rate"
+                      valueA={fighterA.stats.winRate}
+                      valueB={fighterB.stats.winRate}
+                      maxValue={100}
+                      unit="%"
+                    />
+                    <StatBar
+                      label="KO Rate"
+                      valueA={fighterA.stats.koRate}
+                      valueB={fighterB.stats.koRate}
+                      maxValue={100}
+                      unit="%"
+                    />
+                    <StatBar
+                      label="Submission Rate"
+                      valueA={fighterA.stats.submissionRate}
+                      valueB={fighterB.stats.submissionRate}
+                      maxValue={100}
+                      unit="%"
+                    />
+                    <StatBar
+                      label="Reach"
+                      valueA={fighterA.stats.reach}
+                      valueB={fighterB.stats.reach}
+                      maxValue={250}
+                      unit=" cm"
+                    />
+                    <StatBar
+                      label="Height"
+                      valueA={fighterA.stats.height}
+                      valueB={fighterB.stats.height}
+                      maxValue={220}
+                      unit=" cm"
+                    />
+                    <StatBar
+                      label="Age"
+                      valueA={fighterA.stats.age}
+                      valueB={fighterB.stats.age}
+                      maxValue={50}
+                      unit=" yrs"
+                    />
                   </div>
                 </div>
               </FadeIn>
@@ -225,6 +261,75 @@ export default function Versus() {
               {selectedMatchup.eventName}
             </p>
 
+            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+              <h4 className="text-center font-display text-sm font-bold uppercase tracking-wider text-gold">
+                Tale of the Tape
+              </h4>
+
+              <div className="mt-4 grid grid-cols-[1fr_auto_1fr] gap-x-3 gap-y-3 text-sm">
+                <p className="font-semibold text-white">
+                  {selectedMatchup.fighterA.name}
+                </p>
+                <p className="text-center text-xs uppercase tracking-wider text-gray-500">
+                  Fighter
+                </p>
+                <p className="text-right font-semibold text-white">
+                  {selectedMatchup.fighterB.name}
+                  {selectedMatchup.fighterC
+                    ? ` & ${selectedMatchup.fighterC.name}`
+                    : ""}
+                </p>
+
+                <p>
+                  {selectedMatchup.fighterA.record.wins}-
+                  {selectedMatchup.fighterA.record.losses}-
+                  {selectedMatchup.fighterA.record.draws}
+                </p>
+                <p className="text-center text-gray-500">Record</p>
+                <p className="text-right">
+                  {selectedMatchup.fighterB.record.wins}-
+                  {selectedMatchup.fighterB.record.losses}-
+                  {selectedMatchup.fighterB.record.draws}
+                </p>
+
+                <p>{selectedMatchup.fighterA.stats.height} cm</p>
+                <p className="text-center text-gray-500">Height</p>
+                <p className="text-right">
+                  {selectedMatchup.fighterB.stats.height} cm
+                </p>
+
+                <p>{selectedMatchup.fighterA.stats.reach} cm</p>
+                <p className="text-center text-gray-500">Reach</p>
+                <p className="text-right">
+                  {selectedMatchup.fighterB.stats.reach} cm
+                </p>
+
+                <p>{selectedMatchup.fighterA.stats.age}</p>
+                <p className="text-center text-gray-500">Age</p>
+                <p className="text-right">
+                  {selectedMatchup.fighterB.stats.age}
+                </p>
+
+                <p>{selectedMatchup.fighterA.style}</p>
+                <p className="text-center text-gray-500">Style</p>
+                <p className="text-right">{selectedMatchup.fighterB.style}</p>
+              </div>
+
+              {selectedMatchup.fighterC && (
+                <p className="mt-4 rounded-xl bg-primary/10 p-3 text-center text-xs leading-relaxed text-gray-300">
+                  Handicap note: fighter B side includes{" "}
+                  <span className="font-bold text-gold">
+                    {selectedMatchup.fighterB.name}
+                  </span>{" "}
+                  and{" "}
+                  <span className="font-bold text-gold">
+                    {selectedMatchup.fighterC.name}
+                  </span>
+                  .
+                </p>
+              )}
+            </div>
+
             <div className="mt-6 space-y-5 text-gray-300">
               <div>
                 <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">
@@ -253,6 +358,14 @@ export default function Versus() {
                 </p>
               </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setSelectedMatchup(null)}
+              className="mt-8 w-full rounded-full bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-dark"
+            >
+              Close Storyline
+            </button>
           </motion.div>
         </div>
       )}
