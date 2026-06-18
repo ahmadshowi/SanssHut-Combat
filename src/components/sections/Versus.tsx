@@ -1,16 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { TrendingUp, CalendarDays } from "lucide-react";
+import { X, BookOpen, TrendingUp, CalendarDays } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FadeIn from "@/components/ui/FadeIn";
 import VersusFighterCard from "@/components/ui/VersusFighterCard";
 import StatBar from "@/components/ui/StatBar";
 import { matchups } from "@/data/stats";
 import { formatDate } from "@/lib/utils";
+import { VersusMatchup } from "@/types";
 
 export default function Versus() {
+  const [selectedMatchup, setSelectedMatchup] =
+    useState<VersusMatchup | null>(null);
+
   return (
     <section id="versus" className="relative section-padding overflow-hidden">
       <div className="absolute inset-0 -z-20">
@@ -27,8 +32,8 @@ export default function Versus() {
 
       <SectionHeading
         label="Fight Card"
-        title="Sansshut Combat Night"
-        description="Every fight has its own rivalry, pressure, and storyline."
+        title="SanssHut Combat Night"
+        description="Tap every fight card to reveal the storyline behind the battle."
       />
 
       <div className="space-y-28">
@@ -40,73 +45,84 @@ export default function Versus() {
 
           return (
             <div key={matchup.id} className="relative">
-              <FadeIn className="mb-8 text-center">
-                <p className="font-display text-sm font-bold uppercase tracking-[0.35em] text-primary">
-                  Fight #{index + 1}
-                </p>
+              <button
+                type="button"
+                onClick={() => setSelectedMatchup(matchup)}
+                className="group block w-full text-left"
+              >
+                <FadeIn className="mb-8 text-center">
+                  <p className="font-display text-sm font-bold uppercase tracking-[0.35em] text-primary">
+                    Fight #{index + 1}
+                  </p>
 
-                <h3 className="mt-2 font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-wide">
-                  {isHandicap ? "1 VS 2 Handicap Match" : "1 VS 1 Matchup"}
-                </h3>
+                  <h3 className="mt-2 font-display text-2xl font-extrabold uppercase tracking-wide transition group-hover:text-primary sm:text-4xl">
+                    {isHandicap ? "1 VS 2 Handicap Match" : "1 VS 1 Matchup"}
+                  </h3>
 
-                <p className="mt-3 text-sm text-gray-400">{eventName}</p>
-              </FadeIn>
+                  <p className="mt-3 text-sm text-gray-400">{eventName}</p>
 
-              <div className="relative grid grid-cols-1 sm:grid-cols-3 items-center gap-10 sm:gap-4">
-                <FadeIn
-                  direction="left"
-                  className="order-1 sm:order-1 flex justify-center sm:justify-end"
-                >
-                  <VersusFighterCard fighter={fighterA} align="left" />
-                </FadeIn>
-
-                <FadeIn className="order-3 sm:order-2 flex justify-center">
-                  <div className="relative flex h-28 w-28 sm:h-36 sm:w-36 items-center justify-center">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      className="absolute inset-0 rounded-full border-2 border-dashed border-gold/40"
-                    />
-
-                    <motion.div
-                      animate={{
-                        boxShadow: [
-                          "0 0 25px rgba(232,19,31,0.5)",
-                          "0 0 50px rgba(232,19,31,0.9)",
-                          "0 0 25px rgba(232,19,31,0.5)",
-                        ],
-                      }}
-                      transition={{ duration: 2.5, repeat: Infinity }}
-                      className="flex h-20 w-20 sm:h-28 sm:w-28 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark"
-                    >
-                      <span className="font-display text-2xl sm:text-4xl font-extrabold italic text-white">
-                        VS
-                      </span>
-                    </motion.div>
+                  <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary">
+                    <BookOpen size={14} />
+                    Tap to reveal storyline
                   </div>
                 </FadeIn>
 
-                <FadeIn
-                  direction="right"
-                  className="order-2 sm:order-3 flex justify-center sm:justify-start"
-                >
-                  <div className="flex flex-col gap-4">
-                    <VersusFighterCard fighter={fighterB} align="right" />
-                    {fighterC && (
-                      <VersusFighterCard fighter={fighterC} align="right" />
-                    )}
-                  </div>
-                </FadeIn>
-              </div>
+                <div className="relative grid grid-cols-1 items-center gap-10 rounded-[2rem] border border-white/10 bg-white/[0.02] p-4 transition hover:border-primary/50 hover:bg-primary/[0.03] sm:grid-cols-3 sm:gap-4 sm:p-6">
+                  <FadeIn
+                    direction="left"
+                    className="order-1 flex justify-center sm:order-1 sm:justify-end"
+                  >
+                    <VersusFighterCard fighter={fighterA} align="left" />
+                  </FadeIn>
+
+                  <FadeIn className="order-3 flex justify-center sm:order-2">
+                    <div className="relative flex h-28 w-28 items-center justify-center sm:h-36 sm:w-36">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 8,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                        className="absolute inset-0 rounded-full border-2 border-dashed border-gold/40"
+                      />
+
+                      <motion.div
+                        animate={{
+                          boxShadow: [
+                            "0 0 25px rgba(232,19,31,0.5)",
+                            "0 0 50px rgba(232,19,31,0.9)",
+                            "0 0 25px rgba(232,19,31,0.5)",
+                          ],
+                        }}
+                        transition={{ duration: 2.5, repeat: Infinity }}
+                        className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark sm:h-28 sm:w-28"
+                      >
+                        <span className="font-display text-2xl font-extrabold italic text-white sm:text-4xl">
+                          VS
+                        </span>
+                      </motion.div>
+                    </div>
+                  </FadeIn>
+
+                  <FadeIn
+                    direction="right"
+                    className="order-2 flex justify-center sm:order-3 sm:justify-start"
+                  >
+                    <div className="flex flex-col gap-4">
+                      <VersusFighterCard fighter={fighterB} align="right" />
+                      {fighterC && (
+                        <VersusFighterCard fighter={fighterC} align="right" />
+                      )}
+                    </div>
+                  </FadeIn>
+                </div>
+              </button>
 
               <FadeIn className="mt-14 mx-auto max-w-3xl">
                 <div className="glass-card p-6 sm:p-8">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-4">
-                    <h3 className="font-display text-lg sm:text-xl font-bold uppercase tracking-wide text-gold">
+                  <div className="flex flex-col gap-2 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 className="font-display text-lg font-bold uppercase tracking-wide text-gold sm:text-xl">
                       {eventName}
                     </h3>
 
@@ -159,9 +175,8 @@ export default function Versus() {
 
               <FadeIn className="mt-12 mx-auto max-w-3xl">
                 <div className="glass-card p-6 sm:p-8">
-                  <h3 className="text-center font-display text-xl sm:text-2xl font-bold uppercase tracking-wide">
-                    Fight{" "}
-                    <span className="text-gradient-red">Analytics</span>
+                  <h3 className="text-center font-display text-xl font-bold uppercase tracking-wide sm:text-2xl">
+                    Fight <span className="text-gradient-red">Analytics</span>
                   </h3>
 
                   <p className="mt-2 text-center text-sm text-gray-400">
@@ -169,48 +184,12 @@ export default function Versus() {
                   </p>
 
                   <div className="mt-6 flex flex-col divide-y divide-white/5">
-                    <StatBar
-                      label="Win Rate"
-                      valueA={fighterA.stats.winRate}
-                      valueB={fighterB.stats.winRate}
-                      maxValue={100}
-                      unit="%"
-                    />
-                    <StatBar
-                      label="KO Rate"
-                      valueA={fighterA.stats.koRate}
-                      valueB={fighterB.stats.koRate}
-                      maxValue={100}
-                      unit="%"
-                    />
-                    <StatBar
-                      label="Submission Rate"
-                      valueA={fighterA.stats.submissionRate}
-                      valueB={fighterB.stats.submissionRate}
-                      maxValue={100}
-                      unit="%"
-                    />
-                    <StatBar
-                      label="Reach"
-                      valueA={fighterA.stats.reach}
-                      valueB={fighterB.stats.reach}
-                      maxValue={250}
-                      unit=" cm"
-                    />
-                    <StatBar
-                      label="Height"
-                      valueA={fighterA.stats.height}
-                      valueB={fighterB.stats.height}
-                      maxValue={220}
-                      unit=" cm"
-                    />
-                    <StatBar
-                      label="Age"
-                      valueA={fighterA.stats.age}
-                      valueB={fighterB.stats.age}
-                      maxValue={50}
-                      unit=" yrs"
-                    />
+                    <StatBar label="Win Rate" valueA={fighterA.stats.winRate} valueB={fighterB.stats.winRate} maxValue={100} unit="%" />
+                    <StatBar label="KO Rate" valueA={fighterA.stats.koRate} valueB={fighterB.stats.koRate} maxValue={100} unit="%" />
+                    <StatBar label="Submission Rate" valueA={fighterA.stats.submissionRate} valueB={fighterB.stats.submissionRate} maxValue={100} unit="%" />
+                    <StatBar label="Reach" valueA={fighterA.stats.reach} valueB={fighterB.stats.reach} maxValue={250} unit=" cm" />
+                    <StatBar label="Height" valueA={fighterA.stats.height} valueB={fighterB.stats.height} maxValue={220} unit=" cm" />
+                    <StatBar label="Age" valueA={fighterA.stats.age} valueB={fighterB.stats.age} maxValue={50} unit=" yrs" />
                   </div>
                 </div>
               </FadeIn>
@@ -218,6 +197,65 @@ export default function Versus() {
           );
         })}
       </div>
+
+      {selectedMatchup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-background p-6 shadow-2xl sm:p-8"
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedMatchup(null)}
+              className="absolute right-5 top-5 rounded-full bg-white/10 p-2 text-white transition hover:bg-primary"
+            >
+              <X size={20} />
+            </button>
+
+            <p className="font-display text-sm font-bold uppercase tracking-[0.3em] text-primary">
+              Fight Storyline
+            </p>
+
+            <h3 className="mt-3 pr-10 font-display text-2xl font-extrabold uppercase text-white sm:text-4xl">
+              {selectedMatchup.title}
+            </h3>
+
+            <p className="mt-2 text-sm font-semibold text-gold">
+              {selectedMatchup.eventName}
+            </p>
+
+            <div className="mt-6 space-y-5 text-gray-300">
+              <div>
+                <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  Why This Fight Happened
+                </h4>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  {selectedMatchup.storyline}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  Fight Tension
+                </h4>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  {selectedMatchup.tension}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  Prediction Analysis
+                </h4>
+                <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  {selectedMatchup.prediction.analysis}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </section>
   );
 }

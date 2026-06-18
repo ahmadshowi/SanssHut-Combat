@@ -46,6 +46,10 @@ export interface VersusMatchup {
   eventName: string;
   date: string;
 
+  title: string;
+  storyline: string;
+  tension: string;
+
   prediction: {
     fighterAChance: number;
     fighterBChance: number;
