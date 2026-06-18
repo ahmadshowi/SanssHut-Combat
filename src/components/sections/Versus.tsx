@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { X, BookOpen, TrendingUp, CalendarDays } from "lucide-react";
+import {
+  X,
+  BookOpen,
+  TrendingUp,
+  CalendarDays,
+  Send,
+  MessageCircle,
+} from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FadeIn from "@/components/ui/FadeIn";
 import VersusFighterCard from "@/components/ui/VersusFighterCard";
@@ -11,6 +18,262 @@ import StatBar from "@/components/ui/StatBar";
 import { matchups } from "@/data/stats";
 import { formatDate } from "@/lib/utils";
 import { VersusMatchup } from "@/types";
+import { supabase } from "@/lib/supabase";
+
+type Vote = {
+  id: string;
+  matchup_id: string;
+  fighter_pick: string;
+  created_at: string;
+};
+
+type FanComment = {
+  id: string;
+  matchup_id: string;
+  username: string;
+  comment: string;
+  created_at: string;
+};
+
+function FanInteraction({ matchup }: { matchup: VersusMatchup }) {
+  const [votes, setVotes] = useState<Vote[]>([]);
+  const [comments, setComments] = useState<FanComment[]>([]);
+  const [selectedPick, setSelectedPick] = useState("");
+  const [username, setUsername] = useState("");
+  const [comment, setComment] = useState("");
+  const [loadingVote, setLoadingVote] = useState(false);
+  const [loadingComment, setLoadingComment] = useState(false);
+
+  const fighterAPick = matchup.fighterA.id;
+  const fighterBPick = matchup.fighterC
+    ? `${matchup.fighterB.id}-${matchup.fighterC.id}`
+    : matchup.fighterB.id;
+
+  const fighterBLabel = matchup.fighterC
+    ? `${matchup.fighterB.name} & ${matchup.fighterC.name}`
+    : matchup.fighterB.name;
+
+  const voteStats = useMemo(() => {
+    const total = votes.length;
+    const fighterAVotes = votes.filter(
+      (vote) => vote.fighter_pick === fighterAPick
+    ).length;
+    const fighterBVotes = votes.filter(
+      (vote) => vote.fighter_pick === fighterBPick
+    ).length;
+
+    return {
+      total,
+      fighterAVotes,
+      fighterBVotes,
+      fighterAPercentage:
+        total > 0 ? Math.round((fighterAVotes / total) * 100) : 0,
+      fighterBPercentage:
+        total > 0 ? Math.round((fighterBVotes / total) * 100) : 0,
+    };
+  }, [votes, fighterAPick, fighterBPick]);
+
+  async function fetchVotes() {
+    const { data } = await supabase
+      .from("votes")
+      .select("*")
+      .eq("matchup_id", matchup.id)
+      .order("created_at", { ascending: false });
+
+    setVotes(data || []);
+  }
+
+  async function fetchComments() {
+    const { data } = await supabase
+      .from("comments")
+      .select("*")
+      .eq("matchup_id", matchup.id)
+      .order("created_at", { ascending: false });
+
+    setComments(data || []);
+  }
+
+  useEffect(() => {
+    fetchVotes();
+    fetchComments();
+  }, [matchup.id]);
+
+  async function handleVote() {
+    if (!selectedPick) return;
+
+    setLoadingVote(true);
+
+    const { error } = await supabase.from("votes").insert({
+      matchup_id: matchup.id,
+      fighter_pick: selectedPick,
+    });
+
+    setLoadingVote(false);
+
+    if (!error) {
+      setSelectedPick("");
+      fetchVotes();
+    }
+  }
+
+  async function handleComment() {
+    if (!username.trim() || !comment.trim()) return;
+
+    setLoadingComment(true);
+
+    const { error } = await supabase.from("comments").insert({
+      matchup_id: matchup.id,
+      username: username.trim(),
+      comment: comment.trim(),
+    });
+
+    setLoadingComment(false);
+
+    if (!error) {
+      setComment("");
+      fetchComments();
+    }
+  }
+
+  return (
+    <div className="mt-8 grid gap-6 lg:grid-cols-2">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <h4 className="font-display text-lg font-bold uppercase text-white">
+          Fan Prediction Vote
+        </h4>
+
+        <p className="mt-1 text-sm text-gray-400">
+          Who do you think will win this fight?
+        </p>
+
+        <div className="mt-5 space-y-3">
+          <button
+            type="button"
+            onClick={() => setSelectedPick(fighterAPick)}
+            className={`w-full rounded-2xl border p-4 text-left transition ${
+              selectedPick === fighterAPick
+                ? "border-primary bg-primary/20"
+                : "border-white/10 bg-white/5 hover:border-primary/50"
+            }`}
+          >
+            <p className="font-bold text-white">{matchup.fighterA.name}</p>
+            <p className="text-xs text-gray-400">{matchup.fighterA.style}</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedPick(fighterBPick)}
+            className={`w-full rounded-2xl border p-4 text-left transition ${
+              selectedPick === fighterBPick
+                ? "border-gold bg-gold/20"
+                : "border-white/10 bg-white/5 hover:border-gold/50"
+            }`}
+          >
+            <p className="font-bold text-white">{fighterBLabel}</p>
+            <p className="text-xs text-gray-400">
+              {matchup.fighterC ? "Team Handicap Side" : matchup.fighterB.style}
+            </p>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleVote}
+          disabled={!selectedPick || loadingVote}
+          className="mt-5 w-full rounded-full bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {loadingVote ? "Voting..." : "Vote Now"}
+        </button>
+
+        <div className="mt-6 space-y-4">
+          <div>
+            <div className="mb-1 flex justify-between text-xs text-gray-400">
+              <span>{matchup.fighterA.name}</span>
+              <span>{voteStats.fighterAPercentage}%</span>
+            </div>
+            <div className="h-3 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${voteStats.fighterAPercentage}%` }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-1 flex justify-between text-xs text-gray-400">
+              <span>{fighterBLabel}</span>
+              <span>{voteStats.fighterBPercentage}%</span>
+            </div>
+            <div className="h-3 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-gold"
+                style={{ width: `${voteStats.fighterBPercentage}%` }}
+              />
+            </div>
+          </div>
+
+          <p className="text-center text-xs uppercase tracking-wider text-gray-500">
+            Total Votes: {voteStats.total}
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div className="flex items-center gap-2">
+          <MessageCircle size={18} className="text-primary" />
+          <h4 className="font-display text-lg font-bold uppercase text-white">
+            Fan Discussion
+          </h4>
+        </div>
+
+        <div className="mt-5 grid gap-3">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Your name..."
+            className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-primary"
+          />
+
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Write your comment..."
+            rows={3}
+            className="resize-none rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none focus:border-primary"
+          />
+
+          <button
+            type="button"
+            onClick={handleComment}
+            disabled={!username.trim() || !comment.trim() || loadingComment}
+            className="flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Send size={16} />
+            {loadingComment ? "Sending..." : "Send Comment"}
+          </button>
+        </div>
+
+        <div className="mt-6 max-h-64 space-y-3 overflow-y-auto pr-1">
+          {comments.length > 0 ? (
+            comments.map((item) => (
+              <div key={item.id} className="rounded-2xl bg-black/20 p-4">
+                <p className="font-bold text-white">{item.username}</p>
+                <p className="mt-1 text-sm leading-relaxed text-gray-400">
+                  {item.comment}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="rounded-2xl bg-black/20 p-4 text-center text-sm text-gray-500">
+              No comments yet. Be the first fan to react.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Versus() {
   const [selectedMatchup, setSelectedMatchup] =
@@ -239,7 +502,7 @@ export default function Versus() {
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-white/10 bg-background p-6 shadow-2xl sm:p-8"
+            className="relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-white/10 bg-background p-6 shadow-2xl sm:p-8"
           >
             <button
               type="button"
@@ -358,6 +621,8 @@ export default function Versus() {
                 </p>
               </div>
             </div>
+
+            <FanInteraction matchup={selectedMatchup} />
 
             <button
               type="button"
