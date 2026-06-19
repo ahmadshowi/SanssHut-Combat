@@ -9,7 +9,7 @@ export const sportCategories: (SportCategory & {
     name: "MMA",
     description:
       "The pinnacle of combat sports — striking, grappling, and submissions combined in the most complete fighting discipline.",
-    image: "/images/mmas.png",
+    image: "/images/kick.png",
     bg: "#E8131F",
     panel: "#F0444D",
   },
@@ -27,7 +27,7 @@ export const sportCategories: (SportCategory & {
     name: "Kickboxing",
     description:
       "A dynamic blend of striking disciplines, combining boxing hands with powerful kicks for explosive standup battles.",
-    image: "/images/kick.png",
+    image: "/images/kicks.png",
     bg: "#6E1111",
     panel: "#A4161A",
   },
