@@ -158,7 +158,7 @@ export default function Categories() {
           className="absolute left-4 top-6 text-xs font-semibold uppercase text-white opacity-90 sm:left-8"
           style={{ zIndex: 60, letterSpacing: "0.18em" }}
         >
-          SANSSHUT
+          
         </div>
 
         <div className="absolute inset-0" style={{ zIndex: 3 }}>
