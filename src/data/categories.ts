@@ -18,7 +18,7 @@ export const sportCategories: (SportCategory & {
     name: "Boxing",
     description:
       "The art of pugilism. Speed, power, and footwork define the sport that built the foundation of combat entertainment.",
-    image: "/images/boxings.png",
+    image: "/images/boxing.png",
     bg: "#B8860B",
     panel: "#D4AF37",
   },
@@ -27,7 +27,7 @@ export const sportCategories: (SportCategory & {
     name: "Kickboxing",
     description:
       "A dynamic blend of striking disciplines, combining boxing hands with powerful kicks for explosive standup battles.",
-    image: "/images/kicks.png",
+    image: "/images/kick.png",
     bg: "#6E1111",
     panel: "#A4161A",
   },
